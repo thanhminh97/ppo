@@ -1,45 +1,58 @@
-# Proximal Policy Optimization (PPO) Implementation
+Proximal Policy Optimization (PPO)
 
-This repository contains an implementation of **Proximal Policy Optimization (PPO)** — a popular and effective reinforcement learning algorithm developed by OpenAI.
+Đây là kho mã triển khai thuật toán Proximal Policy Optimization (PPO) — một trong những phương pháp học tăng cường phổ biến và hiệu quả, được phát triển bởi OpenAI.
 
-## What is PPO?
+🔍 Giới thiệu
 
-PPO is a policy gradient method designed to update policies reliably and efficiently. It uses a clipped surrogate objective to avoid large policy updates, making training more stable compared to earlier methods like TRPO.
+PPO là một thuật toán học chính sách dựa trên chính sách gradient (policy gradient), mục tiêu là tối ưu chính sách một cách ổn định và hiệu quả, tránh các cập nhật quá lớn có thể làm phân tán chính sách.
 
-## Key Features
+⚙️ Cách hoạt động
 
-- Stable and efficient policy optimization  
-- Uses clipped objective to limit policy updates  
-- Supports both discrete and continuous action spaces  
-- Easy to implement and tune  
+Thu thập dữ liệu: Chạy chính sách hiện tại trong môi trường và ghi lại các trải nghiệm (trạng thái, hành động, phần thưởng).
 
-## How PPO Works
+Ước tính lợi ích (Advantage): Tính giá trị lợi ích ̂ cho mỗi hành động, thường dùng GAE (Generalized Advantage Estimation).
 
-1. Collect experiences by running the current policy in the environment.  
-2. Compute advantages to estimate how good each action is compared to average.  
-3. Update the policy by maximizing the clipped surrogate objective:
+Cập nhật chính sách: Tối ưu hàm mất mát PPO với cơ chế clipping để giới hạn mức thay đổi của chính sách.
 
-\[
-L^{\text{clip}}(\theta) = \mathbb{E}_t \left[ \min \left( r_t(\theta) \hat{A}_t, \; \text{clip}(r_t(\theta), 1 - \epsilon, 1 + \epsilon) \hat{A}_t \right) \right]
-\]
+📐 Công thức hàm mất mát
 
-where  
-- \( r_t(\theta) \) is the ratio of new policy probability to old policy probability,  
-- \( \hat{A}_t \) is the advantage estimate,  
-- \( \epsilon \) controls the clipping range.
+L^{\text{clip}}(\theta) = \mathbb{E}_t \big[ \min \big( r_t(\theta) \hat{A}_t,\; \mathrm{clip}(r_t(\theta),1-\epsilon,1+\epsilon) \hat{A}_t \big) \big]
 
-## Usage
+: Tỷ lệ xác suất thực hiện hành động theo chính sách mới so với chính sách cũ.
 
-- This repo provides code to train PPO agents on common RL environments like OpenAI Gym.  
-- You can customize hyperparameters such as learning rate, clipping epsilon, number of epochs, etc.
+: Ước tính lợi ích, thể hiện độ tốt hơn của hành động so với mức trung bình.
 
-## Requirements
+: Tham số clip, thường đặt khoảng 0.1–0.2 để giới hạn  trong [1−ε, 1+ε].
 
-- Python 3.x  
-- PyTorch  
-- OpenAI Gym
+Hàm clip giúp ngăn không cho policy update vượt quá vùng an toàn, giữ ổn định quá trình huấn luyện.
 
-## Installation
+🛠 Cài đặt
 
-```bash
+# Tạo môi trường ảo và cài đặt các thư viện cần thiết
+git clone <đường dẫn repo>
+cd <tên thư mục>
+python3 -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\\Scripts\\activate  # Windows
 pip install -r requirements.txt
+
+requirements.txt của bạn có thể bao gồm:
+
+torch
+gym
+numpy
+
+🚀 Sử dụng
+
+Chạy huấn luyện PPO trên môi trường CartPole-v1:
+
+python train_ppo.py --env CartPole-v1
+
+Tuỳ chỉnh tham số hyperparameter trong file cấu hình hoặc dòng lệnh.
+
+📚 Tham khảo
+
+Schulman et al., Proximal Policy Optimization Algorithms (2017): https://arxiv.org/abs/1707.06347
+
+OpenAI Spinning Up PPO Tutorial: https://spinningup.openai.com/en/latest/algorithms/ppo.html
+
